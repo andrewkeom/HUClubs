@@ -1,5 +1,5 @@
-import { Colors, Radius, Spacing, Typography } from "@/constants/theme";
 import { StyleSheet, TextInput } from "react-native";
+import { Colors, Radius, Spacing, Typography } from "../constants/theme";
 
 export default function AppTextInput(props) {
   return (

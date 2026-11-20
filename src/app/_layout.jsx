@@ -1,5 +1,5 @@
-import DataProvider from "@/context/DataContext";
 import { Stack } from "expo-router";
+import DataProvider from "../context/DataContext";
 
 export default function RootLayout() {
   return (

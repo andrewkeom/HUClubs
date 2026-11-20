@@ -1,5 +1,5 @@
-import { Colors, Radius, Spacing, Typography } from "@/constants/theme";
 import { Pressable, StyleSheet, Text } from "react-native";
+import { Colors, Radius, Spacing, Typography } from "../constants/theme";
 
 export default function AppButton(props) {
   return (

@@ -2,8 +2,8 @@ import {
     initialEvents,
     initialMemberships,
     initialRegistrations,
-} from "@/data/mockData";
-import { loadData } from "@/lib/storage";
+} from "../data/mockData";
+import { loadData } from "../lib/storage";
 
 import { createContext, useContext, useEffect, useState } from "react";
 

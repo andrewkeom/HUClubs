@@ -1,5 +1,5 @@
-import { Colors, Spacing } from "@/constants/theme";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { Colors, Spacing } from "../constants/theme";
 
 export default function AppScreen(props) {
   const contentStyle = [styles.content, props.contentStyle];
