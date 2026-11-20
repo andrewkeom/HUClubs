@@ -1,15 +1,19 @@
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+
 import * as z from "zod";
+
 import AppButton from "../components/AppButton";
 import AppScreen from "../components/AppScreen";
 import AppTextInput from "../components/AppTextInput";
 import { Colors, Spacing, Typography } from "../constants/theme";
+import { useAuth } from "../context/AuthContext";
 import { users } from "../data/mockData";
 
 export default function LoginScreen() {
   const { role } = useLocalSearchParams();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +25,7 @@ export default function LoginScreen() {
     password: z.string().min(7, "Use at least 7 characters for the password"),
   });
 
-  function handleLogin() {
+  async function handleLogin() {
     setError("");
     const cleanEmail = email.trim().toLowerCase();
 
@@ -57,7 +61,12 @@ export default function LoginScreen() {
       return;
     }
 
-    Alert.alert("Logged in as " + user.name);
+    try {
+      await login(user);
+    } catch (e) {
+      console.error(e);
+      setError("Could not log in, please try again");
+    }
   }
 
   return (
