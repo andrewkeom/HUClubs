@@ -1,13 +1,21 @@
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import AppButton from "../components/AppButton";
 import AppScreen from "../components/AppScreen";
 import { Colors, Spacing, Typography } from "../constants/theme";
+import { useAuth } from "../context/AuthContext";
 
 export default function WelcomeScreen() {
+  const { user } = useAuth();
+
+  if (user !== null) {
+    return <Redirect href="/events"></Redirect>;
+  }
+
   function openLogin(role) {
     router.push({ pathname: "/login", params: { role } });
   }
+
   return (
     <AppScreen centered>
       <View style={styles.titleView}>
