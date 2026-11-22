@@ -27,6 +27,7 @@ export const Spacing = {
   large: 32,
   extraLarge: 40,
 
+  icon: 30, 
   minButtonHeight: 44,
 };
 
