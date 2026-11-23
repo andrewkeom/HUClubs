@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AppScreen from "../../../components/AppScreen";
+import AppTextInput from "../../../components/AppTextInput";
 import EmptyState from "../../../components/EmptyState";
 import EventCard from "../../../components/EventCard";
 import FilterTabs from "../../../components/FilterTabs";
@@ -14,6 +15,7 @@ export default function Events() {
   const { user } = useAuth();
 
   const [filter, setFilter] = useState("upcoming");
+  const [search, setSearch] = useState("");
 
   let options = [
     { key: "upcoming", label: "Upcoming" },
@@ -68,7 +70,19 @@ export default function Events() {
   }
 
   let visibleEvents = filterEvents();
-  visibleEvents = visibleEvents.sort((a, b) => {
+  const searchText = search.trim().toLowerCase();
+  let searchResult = visibleEvents.filter((event) => {
+    if (!searchText) {
+      return true;
+    }
+    return (
+      event.title.toLowerCase().includes(searchText) ||
+      event.location.toLowerCase().includes(searchText) ||
+      findClubName(event.clubId).toLowerCase().includes(searchText)
+    );
+  });
+
+  searchResult = searchResult.sort((a, b) => {
     const dateA = new Date(a.date).getTime();
     const dateB = new Date(b.date).getTime();
     if (filter === "past") {
@@ -79,8 +93,13 @@ export default function Events() {
 
   return (
     <AppScreen>
+      <AppTextInput
+        value={search}
+        onChangeText={setSearch}
+        placeholder="Search by title, club or location"
+      ></AppTextInput>
       <FilterTabs options={options} selected={filter} onSelect={setFilter} />
-      {visibleEvents.map((event) => {
+      {searchResult.map((event) => {
         return (
           <EventCard
             key={event.id}
