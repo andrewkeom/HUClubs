@@ -1,5 +1,6 @@
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { StyleSheet, Text, View } from "react-native";
+import AppButton from "../components/AppButton";
 import { Colors, Spacing, Typography } from "../constants/theme";
 
 export default function EmptyState(props) {
@@ -11,6 +12,9 @@ export default function EmptyState(props) {
         color={Colors.mutedText}
       />
       <Text style={styles.text}>{props.message}</Text>
+      {props.buttonText && (
+        <AppButton onPress={props.onPress} text={props.buttonText} />
+      )}
     </View>
   );
 }
@@ -25,6 +29,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: Colors.mutedText,
     fontSize: Typography.body,
-    fontweight: Typography.weightRegular,
+    fontWeight: Typography.weightRegular,
   },
 });

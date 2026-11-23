@@ -1,5 +1,6 @@
 import { Stack } from "expo-router";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
+import LoadingView from "../components/LoadingView";
 import { Colors } from "../constants/theme";
 import AuthProvider, { useAuth } from "../context/AuthContext";
 import DataProvider from "../context/DataContext";
@@ -17,11 +18,7 @@ export default function RootLayout() {
 function RootNavigator() {
   const { user, isLoading } = useAuth();
   if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator color={Colors.primary}></ActivityIndicator>
-      </View>
-    );
+    return <LoadingView />;
   }
   return (
     <Stack>
