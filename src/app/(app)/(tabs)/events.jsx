@@ -91,6 +91,49 @@ export default function Events() {
     return dateA - dateB;
   });
 
+  let content;
+  if (events.length === 0) {
+    content = <EmptyState message="No events yet." />;
+  } else if (searchResult.length === 0 && searchText) {
+    content = (
+      <EmptyState
+        onPress={() => {
+          setSearch("");
+        }}
+        buttonText="Clear search"
+        message={'No events match "' + searchText + '".'}
+      />
+    );
+  } else if (searchResult.length === 0 && !searchText) {
+    if (filter === "upcoming") {
+      content = <EmptyState message="No upcoming events." />;
+    } else if (filter === "past") {
+      content = <EmptyState message="No past events." />;
+    } else {
+      content = (
+        <EmptyState
+          onPress={() => {
+            setFilter("upcoming");
+          }}
+          buttonText="Browse upcoming events"
+          message="You haven't registered for any events yet."
+        />
+      );
+    }
+  } else {
+    content = searchResult.map((event) => {
+      return (
+        <EventCard
+          key={event.id}
+          event={event}
+          clubName={findClubName(event.clubId)}
+          onPress={() => {
+            console.log(event.title);
+          }}
+        ></EventCard>
+      );
+    });
+  }
   return (
     <AppScreen>
       <AppTextInput
@@ -99,18 +142,7 @@ export default function Events() {
         placeholder="Search by title, club or location"
       ></AppTextInput>
       <FilterTabs options={options} selected={filter} onSelect={setFilter} />
-      {searchResult.map((event) => {
-        return (
-          <EventCard
-            key={event.id}
-            event={event}
-            clubName={findClubName(event.clubId)}
-            onPress={() => {
-              console.log(event.title);
-            }}
-          ></EventCard>
-        );
-      })}
+      {content}
     </AppScreen>
   );
 }
