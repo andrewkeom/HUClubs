@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Text } from "react-native";
 import AppScreen from "../../../components/AppScreen";
+import EmptyState from "../../../components/EmptyState";
 import EventCard from "../../../components/EventCard";
 import FilterTabs from "../../../components/FilterTabs";
 import { initialEvents } from "../../../data/mockData";
@@ -25,6 +26,9 @@ export default function Events() {
         clubName="CS3"
         event={initialEvents[0]}
       ></EventCard>
+      <EmptyState message="No events yet."></EmptyState>
+      <EmptyState message="No events match."></EmptyState>
+      <EmptyState message="Couldn't load events."></EmptyState>
     </AppScreen>
   );
 }
