@@ -7,7 +7,7 @@ import FilterTabs from "../../../components/FilterTabs";
 import LoadingView from "../../../components/LoadingView";
 import { useAuth } from "../../../context/AuthContext";
 import { useData } from "../../../context/DataContext";
-import { clubs } from "../../../data/mockData";
+import { findClubName } from "../../../lib/club";
 import { pastDate } from "../../../lib/format";
 
 export default function Events() {
@@ -34,19 +34,6 @@ export default function Events() {
   }
   if (user.role === "student") {
     options.push({ key: "registered", label: "Registered" });
-  }
-
-  function findClubName(clubId) {
-    const club = clubs.find((c) => {
-      if (c.id === clubId) {
-        return true;
-      }
-      return false;
-    });
-    if (club) {
-      return club.name;
-    }
-    return "Unknown Club";
   }
 
   function filterEvents() {
