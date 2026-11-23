@@ -1,7 +1,5 @@
 import { Stack } from "expo-router";
-import { StyleSheet } from "react-native";
 import LoadingView from "../components/LoadingView";
-import { Colors } from "../constants/theme";
 import AuthProvider, { useAuth } from "../context/AuthContext";
 import DataProvider from "../context/DataContext";
 
@@ -32,12 +30,3 @@ function RootNavigator() {
     </Stack>
   );
 }
-
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Colors.background,
-  },
-});

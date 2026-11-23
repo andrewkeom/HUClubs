@@ -1,34 +1,97 @@
 import { useState } from "react";
-import { Text } from "react-native";
 import AppScreen from "../../../components/AppScreen";
 import EmptyState from "../../../components/EmptyState";
 import EventCard from "../../../components/EventCard";
 import FilterTabs from "../../../components/FilterTabs";
-import { initialEvents } from "../../../data/mockData";
+import LoadingView from "../../../components/LoadingView";
+import { useAuth } from "../../../context/AuthContext";
+import { useData } from "../../../context/DataContext";
+import { clubs } from "../../../data/mockData";
+import { pastDate } from "../../../lib/format";
 
 export default function Events() {
+  const { events, registrations, isLoading, error } = useData();
+  const { user } = useAuth();
+
   const [filter, setFilter] = useState("upcoming");
 
-  const options = [
+  let options = [
     { key: "upcoming", label: "Upcoming" },
     { key: "past", label: "Past" },
-    { key: "registered", label: "Registered" },
   ];
+
+  if (isLoading) {
+    return <LoadingView />;
+  }
+  if (error) {
+    return (
+      <AppScreen>
+        <EmptyState message="Couldn't load events." />
+      </AppScreen>
+    );
+  }
+  if (user.role === "student") {
+    options.push({ key: "registered", label: "Registered" });
+  }
+
+  function findClubName(clubId) {
+    const club = clubs.find((c) => {
+      if (c.id === clubId) {
+        return true;
+      }
+      return false;
+    });
+    if (club) {
+      return club.name;
+    }
+    return "Unknown Club";
+  }
+
+  function filterEvents() {
+    const filteredEvents = events.filter((event) => {
+      if (filter === "upcoming") {
+        return !pastDate(event.date);
+      }
+      if (filter === "past") {
+        return pastDate(event.date);
+      }
+      if (filter === "registered") {
+        return registrations.some((registration) => {
+          return (
+            registration.userId === user.id && registration.eventId === event.id
+          );
+        });
+      }
+      return false;
+    });
+    return filteredEvents;
+  }
+
+  let visibleEvents = filterEvents();
+  visibleEvents = visibleEvents.sort((a, b) => {
+    const dateA = new Date(a.date).getTime();
+    const dateB = new Date(b.date).getTime();
+    if (filter === "past") {
+      return dateB - dateA;
+    }
+    return dateA - dateB;
+  });
 
   return (
     <AppScreen>
-      <Text>{filter}</Text>
       <FilterTabs options={options} selected={filter} onSelect={setFilter} />
-      <EventCard
-        onPress={() => {
-          console.log("Pressed");
-        }}
-        clubName="CS3"
-        event={initialEvents[0]}
-      ></EventCard>
-      <EmptyState message="No events yet."></EmptyState>
-      <EmptyState message="No events match."></EmptyState>
-      <EmptyState message="Couldn't load events."></EmptyState>
+      {visibleEvents.map((event) => {
+        return (
+          <EventCard
+            key={event.id}
+            event={event}
+            clubName={findClubName(event.clubId)}
+            onPress={() => {
+              console.log(event.title);
+            }}
+          ></EventCard>
+        );
+      })}
     </AppScreen>
   );
 }
