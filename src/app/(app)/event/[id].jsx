@@ -1,9 +1,11 @@
 import Ionicons from "@react-native-vector-icons/ionicons";
 import { Stack, router, useLocalSearchParams } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import AppButton from "../../../components/AppButton";
 import AppScreen from "../../../components/AppScreen";
 import EmptyState from "../../../components/EmptyState";
 import { Colors, Spacing, Typography } from "../../../constants/theme";
+import { useAuth } from "../../../context/AuthContext";
 import { useData } from "../../../context/DataContext";
 import { findClubName } from "../../../lib/club";
 import { formatEventDate } from "../../../lib/format";
@@ -11,7 +13,8 @@ import { formatEventDate } from "../../../lib/format";
 export default function EventDetails() {
   const { id } = useLocalSearchParams();
   const eventId = Number(id);
-  const { events } = useData();
+  const { events, deleteEvent } = useData();
+  const { user } = useAuth();
 
   let content;
   const foundEvent = events.find((event) => {
@@ -55,6 +58,29 @@ export default function EventDetails() {
           <Text style={styles.dateLocation}>{foundEvent.location}</Text>
         </View>
         <Text style={styles.description}>{foundEvent.description}</Text>
+        {user.role === "officer" && user.clubId === foundEvent.clubId && (
+          <AppButton
+            onPress={() => {
+              Alert.alert("Delete event", "This can't be undone", [
+                { text: "Cancel", style: "cancel" },
+                {
+                  text: "Delete",
+                  style: "destructive",
+                  onPress: async () => {
+                    try {
+                      await deleteEvent(foundEvent.id);
+                      ToastAndroid.show("Event deleted", ToastAndroid.SHORT);
+                      router.back();
+                    } catch (e) {
+                      Alert.alert("Error", "Couldn't delete the event.");
+                    }
+                  },
+                },
+              ]);
+            }}
+            text="Delete"
+          ></AppButton>
+        )}
       </View>
     );
   }
