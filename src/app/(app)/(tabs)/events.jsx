@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import AppButton from "../../../components/AppButton";
 import AppScreen from "../../../components/AppScreen";
 import AppTextInput from "../../../components/AppTextInput";
@@ -7,6 +8,7 @@ import EmptyState from "../../../components/EmptyState";
 import EventCard from "../../../components/EventCard";
 import FilterTabs from "../../../components/FilterTabs";
 import LoadingView from "../../../components/LoadingView";
+import { Spacing } from "../../../constants/theme";
 import { useAuth } from "../../../context/AuthContext";
 import { useData } from "../../../context/DataContext";
 import { findClubName } from "../../../lib/club";
@@ -134,21 +136,30 @@ export default function Events() {
 
   return (
     <AppScreen>
-      <AppTextInput
-        value={search}
-        onChangeText={setSearch}
-        placeholder="Search by title, club or location"
-      ></AppTextInput>
-      <FilterTabs options={options} selected={filter} onSelect={setFilter} />
-      {user.role === "officer" && (
-        <AppButton
-          onPress={() => {
-            openEventForm();
-          }}
-          text="Add Event"
-        />
-      )}
+      <View style={styles.viewGap}>
+        <AppTextInput
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Search by title, club or location"
+        ></AppTextInput>
+        <FilterTabs options={options} selected={filter} onSelect={setFilter} />
+        {user.role === "officer" && (
+          <AppButton
+            style={{ marginBottom: Spacing.medium }}
+            onPress={() => {
+              openEventForm();
+            }}
+            text="Add Event"
+          />
+        )}
+      </View>
       {content}
     </AppScreen>
   );
 }
+
+const styles = StyleSheet.create({
+  viewGap: {
+    gap: Spacing.extraSmall,
+  },
+});

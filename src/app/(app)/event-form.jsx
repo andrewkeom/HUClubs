@@ -1,5 +1,5 @@
 import DateTimePicker from "@expo/ui/community/datetime-picker";
-import { router, Stack } from "expo-router";
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import * as z from "zod";
@@ -12,19 +12,33 @@ import { useData } from "../../context/DataContext";
 import { formatEventDate } from "../../lib/format";
 
 export default function EventForm() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("");
+  const { id } = useLocalSearchParams();
+  const { events, addEvent, updateEvent } = useData();
+  const editingEvent = events.find((event) => {
+    if (event.id === Number(id)) {
+      return true;
+    }
+    return false;
+  });
+
+  const [title, setTitle] = useState(editingEvent ? editingEvent.title : "");
+  const [description, setDescription] = useState(
+    editingEvent ? editingEvent.description : "",
+  );
+  const [location, setLocation] = useState(
+    editingEvent ? editingEvent.location : "",
+  );
   const [error, setError] = useState("");
 
-  let tomorrow = new Date();
+  const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const [date, setDate] = useState(tomorrow);
+  const [date, setDate] = useState(
+    editingEvent ? new Date(editingEvent.date) : tomorrow,
+  );
 
   const [showDate, setShowDate] = useState(false);
   const [showTime, setShowTime] = useState(false);
 
-  const { addEvent } = useData();
   const { user } = useAuth();
 
   const eventSchema = z.object({
@@ -36,7 +50,7 @@ export default function EventForm() {
     location: z.string().trim().min(1, "Location is required."),
   });
 
-  async function handleAddEvent() {
+  async function handleSave() {
     const result = eventSchema.safeParse({
       title: title,
       description: description,
@@ -54,15 +68,25 @@ export default function EventForm() {
     }
 
     try {
-      await addEvent(
-        result.data.title,
-        result.data.description,
-        result.data.location,
-        date.toISOString(),
-        user.clubId,
-        user.id,
-      );
-      ToastAndroid.show("Event added", ToastAndroid.SHORT);
+      if (editingEvent) {
+        await updateEvent(editingEvent.id, {
+          title: result.data.title,
+          description: result.data.description,
+          location: result.data.location,
+          date: date.toISOString(),
+        });
+        ToastAndroid.show("Changes saved", ToastAndroid.SHORT);
+      } else {
+        await addEvent(
+          result.data.title,
+          result.data.description,
+          result.data.location,
+          date.toISOString(),
+          user.clubId,
+          user.id,
+        );
+        ToastAndroid.show("Event added", ToastAndroid.SHORT);
+      }
       router.back();
     } catch (e) {
       Alert.alert("Error", "Couldn't save the event.");
@@ -71,7 +95,9 @@ export default function EventForm() {
 
   return (
     <AppScreen>
-      <Stack.Screen options={{ title: "Add event" }} />
+      <Stack.Screen
+        options={{ title: editingEvent ? "Edit event" : "Add event" }}
+      />
       <View style={styles.viewGap}>
         <AppTextInput
           value={title}
@@ -90,14 +116,16 @@ export default function EventForm() {
         />
         <View>
           <Text>{formatEventDate(date.toISOString())}</Text>
-          <View>
+          <View style={styles.viewRow}>
             <AppButton
+              style={{ backgroundColor: Colors.accent }}
               onPress={() => {
                 setShowDate(true);
               }}
               text="Pick date"
             />
             <AppButton
+              style={{ backgroundColor: Colors.accent }}
               onPress={() => {
                 setShowTime(true);
               }}
@@ -148,7 +176,7 @@ export default function EventForm() {
         {error.length > 0 && <Text style={styles.error}>{error}</Text>}
         <AppButton
           onPress={() => {
-            handleAddEvent();
+            handleSave();
           }}
           text="Save event"
         />
@@ -163,5 +191,10 @@ const styles = StyleSheet.create({
   },
   viewGap: {
     gap: Spacing.small,
+  },
+  viewRow: {
+    flexDirection: "row",
+    gap: Spacing.extraSmall,
+    marginTop: Spacing.extraSmall,
   },
 });

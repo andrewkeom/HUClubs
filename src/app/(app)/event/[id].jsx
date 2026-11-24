@@ -59,31 +59,45 @@ export default function EventDetails() {
         </View>
         <Text style={styles.description}>{foundEvent.description}</Text>
         {user.role === "officer" && user.clubId === foundEvent.clubId && (
-          <AppButton
-            onPress={() => {
-              Alert.alert("Delete event", "This can't be undone", [
-                { text: "Cancel", style: "cancel" },
-                {
-                  text: "Delete",
-                  style: "destructive",
-                  onPress: async () => {
-                    try {
-                      await deleteEvent(foundEvent.id);
-                      ToastAndroid.show("Event deleted", ToastAndroid.SHORT);
-                      router.back();
-                    } catch (e) {
-                      Alert.alert("Error", "Couldn't delete the event.");
-                    }
+          <View style={styles.viewRow}>
+            <AppButton
+              style={{ backgroundColor: Colors.danger }}
+              onPress={() => {
+                Alert.alert("Delete event", "This can't be undone", [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        await deleteEvent(foundEvent.id);
+                        ToastAndroid.show("Event deleted", ToastAndroid.SHORT);
+                        router.back();
+                      } catch (e) {
+                        Alert.alert("Error", "Couldn't delete the event.");
+                      }
+                    },
                   },
-                },
-              ]);
-            }}
-            text="Delete"
-          ></AppButton>
+                ]);
+              }}
+              text="Delete"
+            />
+            <AppButton
+              onPress={() => {
+                openEventForm();
+              }}
+              text="Edit event"
+            />
+          </View>
         )}
       </View>
     );
   }
+
+  function openEventForm() {
+    router.push({ pathname: "/event-form", params: { id } });
+  }
+
   return (
     <AppScreen>
       <Stack.Screen options={{ title: "Event Details" }} />
@@ -94,7 +108,11 @@ export default function EventDetails() {
 
 const styles = StyleSheet.create({
   view: {
-    gap: Spacing.medium,
+    gap: Spacing.small,
+  },
+  viewRow: {
+    flexDirection: "row",
+    gap: Spacing.extraSmall,
   },
   title: {
     fontSize: Typography.title,
