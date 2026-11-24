@@ -145,7 +145,6 @@ export default function Events() {
         <FilterTabs options={options} selected={filter} onSelect={setFilter} />
         {user.role === "officer" && (
           <AppButton
-            style={{ marginBottom: Spacing.medium }}
             onPress={() => {
               openEventForm();
             }}
@@ -161,5 +160,6 @@ export default function Events() {
 const styles = StyleSheet.create({
   viewGap: {
     gap: Spacing.extraSmall,
+    marginBottom: Spacing.small,
   },
 });
