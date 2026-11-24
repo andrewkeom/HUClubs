@@ -6,7 +6,7 @@ import * as z from "zod";
 import AppButton from "../../components/AppButton";
 import AppScreen from "../../components/AppScreen";
 import AppTextInput from "../../components/AppTextInput";
-import { Colors, Spacing } from "../../constants/theme";
+import { Colors, Spacing, Typography } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 import { useData } from "../../context/DataContext";
 import { formatEventDate } from "../../lib/format";
@@ -89,6 +89,7 @@ export default function EventForm() {
       }
       router.back();
     } catch (e) {
+      console.error(e);
       Alert.alert("Error", "Couldn't save the event.");
     }
   }
@@ -99,22 +100,33 @@ export default function EventForm() {
         options={{ title: editingEvent ? "Edit event" : "Add event" }}
       />
       <View style={styles.viewGap}>
-        <AppTextInput
-          value={title}
-          onChangeText={setTitle}
-          placeholder="Enter a title"
-        />
-        <AppTextInput
-          value={description}
-          onChangeText={setDescription}
-          placeholder="Enter a description"
-        />
-        <AppTextInput
-          value={location}
-          onChangeText={setLocation}
-          placeholder="Enter a location"
-        />
         <View>
+          <Text style={styles.label}>Title</Text>
+          <AppTextInput
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Enter a title"
+          />
+        </View>
+        <View>
+          <Text style={styles.label}>Description</Text>
+          <AppTextInput
+            value={description}
+            onChangeText={setDescription}
+            placeholder="Enter a description"
+            multiline
+          />
+        </View>
+        <View>
+          <Text style={styles.label}>Location</Text>
+          <AppTextInput
+            value={location}
+            onChangeText={setLocation}
+            placeholder="Enter a location"
+          />
+        </View>
+        <View>
+          <Text style={styles.label}>Date & Time</Text>
           <Text>{formatEventDate(date.toISOString())}</Text>
           <View style={styles.viewRow}>
             <AppButton
@@ -196,5 +208,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: Spacing.extraSmall,
     marginTop: Spacing.extraSmall,
+  },
+  label: {
+    fontSize: Typography.body,
+    fontWeight: Typography.weightMedium,
+    color: Colors.primary,
   },
 });

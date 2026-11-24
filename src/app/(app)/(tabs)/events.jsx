@@ -149,7 +149,7 @@ export default function Events() {
             onPress={() => {
               openEventForm();
             }}
-            text="Add Event"
+            text="Add event"
           />
         )}
       </View>

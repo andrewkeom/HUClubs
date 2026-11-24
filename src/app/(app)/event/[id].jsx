@@ -24,6 +24,10 @@ export default function EventDetails() {
     return false;
   });
 
+  function openEventForm() {
+    router.push({ pathname: "/event-form", params: { id } });
+  }
+
   if (!foundEvent) {
     content = (
       <EmptyState
@@ -74,13 +78,14 @@ export default function EventDetails() {
                         ToastAndroid.show("Event deleted", ToastAndroid.SHORT);
                         router.back();
                       } catch (e) {
+                        console.error(e);
                         Alert.alert("Error", "Couldn't delete the event.");
                       }
                     },
                   },
                 ]);
               }}
-              text="Delete"
+              text="Delete event"
             />
             <AppButton
               onPress={() => {
@@ -94,13 +99,9 @@ export default function EventDetails() {
     );
   }
 
-  function openEventForm() {
-    router.push({ pathname: "/event-form", params: { id } });
-  }
-
   return (
     <AppScreen>
-      <Stack.Screen options={{ title: "Event Details" }} />
+      <Stack.Screen options={{ title: "Event details" }} />
       {content}
     </AppScreen>
   );

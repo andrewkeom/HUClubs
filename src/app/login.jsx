@@ -104,7 +104,7 @@ export default function LoginScreen() {
       {error.length > 0 && <Text style={styles.error}>{error}</Text>}
 
       <View style={styles.button}>
-        <AppButton text="Submit" onPress={handleLogin} />
+        <AppButton text="Log in" onPress={handleLogin} />
       </View>
     </AppScreen>
   );
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: Typography.body,
-    color: Colors.mutedText,
+    color: Colors.primary,
     marginTop: Spacing.medium,
   },
   subHeading: {

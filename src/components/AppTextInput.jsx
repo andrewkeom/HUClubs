@@ -14,6 +14,7 @@ export default function AppTextInput(props) {
         autoCapitalize={props.autoCapitalize}
         autoComplete={props.autoComplete}
         autoCorrect={props.autoCorrect}
+        multiline={props.multiline}
         style={[styles.input, props.style]}
       />
     </>
