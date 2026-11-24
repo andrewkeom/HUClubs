@@ -1,56 +1,100 @@
-# Welcome to your Expo app 👋
+# HU Clubs
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+HU Clubs is an Android app for Haigazian University clubs, built for students and club officers. Club events are currently scattered across social media pages and posters, so students can't easily tell what's on. HU Clubs puts every club's events in one place, where students can browse them and officers can manage their own club's events.
 
-## Get started
+## Setup
 
-1. Install dependencies
-
+1. Install dependencies:
    ```bash
    npm install
    ```
-
-2. Start the app
-
+2. Start the development server:
    ```bash
    npx expo start
    ```
+3. Scan the QR code with the **Expo Go** app on your phone.
 
-In the output, you'll find options to open the app in a
+Tested on Android: **Samsung Galaxy A35 (SM-A356E/DS)**, Android **14**.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Mock login credentials
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+| Role | Name | Email | Password |
+|------|------|-------|----------|
+| Student | Lara | `lara.hajjar@students.haigazian.edu.lb` | `lara@123` |
+| Officer (CS3 president) | Karim | `cs3.president@students.haigazian.edu.lb` | `karim@123` |
 
-## Get a fresh project
+These are fictional demo accounts.
 
-When you're ready, run:
+## Features
 
-```bash
-npm run reset-project
+- Login with form validation
+- Saved session (you stay logged in after closing the app)
+- Protected routes (screens require login)
+- Events list with **Upcoming / Past** filters, plus **Registered** for students, and search
+- Empty states when a list or search has no results
+- Event details screen
+- Add, edit, and delete events (officers only, for their own club only)
+  - Form validation with Zod
+  - Date/time picker
+  - Confirmation before deleting
+  - Success messages after saving or deleting
+- Data saved on the device with AsyncStorage
+- Clubs list
+
+## Project structure
+
+```
+src/
+├── app/           Screens and routes
+├── components/    Reusable UI components
+├── context/       AuthContext (login/session) and DataContext (events, memberships, and registrations)
+├── lib/           Helpers: storage, format, club
+├── constants/
+│   └── theme.js   Colors, spacing, and fonts
+└── data/
+    └── mockData.js  Demo users, clubs, and events (clubs are read from here)
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+## Known limitations
 
-### Other setup steps
+- Data is stored on one phone only and is not shared between devices.
+- The mock login is not secure. Passwords are stored in plain text in `mockData.js`.
+- Clubs cannot be created in the app.
+- Not implemented: event registration buttons, club details pages, joining clubs, and officer approval tools.
+- Past events cannot be edited.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## AI use statement
 
-## Learn more
+I used Claude (Claude Code in VS Code) as a learning and review tool. I used it for:
 
-To learn more about developing your project with Expo, look at the following resources:
+- **The project plan:** CLAUDE.md was written with AI help.
+- **Concept explanations:** protected routes, callbacks, `filter`/`find`/`sort`, working with dates, and Zod.
+- **Error explanations:** what error messages meant and what usually causes them.
+- **Code reviews:** the AI assistant reviewed my code and described problems in words (what was wrong and which concept to look at). I wrote all code and every fix myself.
+- **Documentation:** a summary of the date picker documentation.
+- **Planning:** a schedule for the final evening of work.
+- **ESLint:** the AI assistant ran `npx expo lint`, which made the Expo CLI install ESLint (`eslint` and `eslint-config-expo`) and generate `eslint.config.js` automatically. I fixed the reported lint problems myself.
+- **Mock data:** the demo users, clubs, and events in `src/data/mockData.js` were generated with AI help. I reviewed them and used them as-is.
+- **Diagram:** the app structure diagram (`diagram.png`) was made with AI help.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Apart from the mock data in `mockData.js`, no code was written or generated by AI, and AI autocomplete was turned off in my editor.
 
-## Join the community
+## Screenshots and diagram
 
-Join our community of developers creating universal apps.
+| # | Screenshot | Shows |
+|---|------------|-------|
+| 1 | [welcome.png](./docs/screenshots/welcome.png) | Welcome screen |
+| 2 | [login-error.png](./docs/screenshots/login-error.png) | Login with a validation error |
+| 3 | [events-officer.png](./docs/screenshots/events-officer.png) | Events list as an officer (Karim), with the Add event button |
+| 4 | [search-no-results.png](./docs/screenshots/search-no-results.png) | The "No events match" empty state |
+| 5 | [event-details.png](./docs/screenshots/event-details.png) | Details of an upcoming CS3 event, with Edit and Delete |
+| 6 | [event-form.png](./docs/screenshots/event-form.png) | The event form with a validation error |
+| 7 | [delete-confirm.png](./docs/screenshots/delete-confirm.png) | The delete confirmation dialog |
+| 8 | [clubs.png](./docs/screenshots/clubs.png) | The Clubs tab |
+| 9 | [events-student.png](./docs/screenshots/events-student.png) | The Registered filter as a student (Lara) |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Diagram: [diagram.png](./docs/screenshots/diagram.png)
+
+## Final commit
+
+`[final commit hash]`
