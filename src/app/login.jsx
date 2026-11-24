@@ -22,7 +22,7 @@ export default function LoginScreen() {
 
   const loginSchema = z.object({
     email: z.email("Enter a valid email address."),
-    password: z.string().min(7, "Use at least 7 characters for the password"),
+    password: z.string().min(7, "Use at least 7 characters for the password."),
   });
 
   async function handleLogin() {

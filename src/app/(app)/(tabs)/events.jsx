@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
+import AppButton from "../../../components/AppButton";
 import AppScreen from "../../../components/AppScreen";
 import AppTextInput from "../../../components/AppTextInput";
 import EmptyState from "../../../components/EmptyState";
@@ -127,6 +128,10 @@ export default function Events() {
     router.push({ pathname: "/event/[id]", params: { id } });
   }
 
+  function openEventForm() {
+    router.push({ pathname: "/event-form" });
+  }
+
   return (
     <AppScreen>
       <AppTextInput
@@ -135,6 +140,14 @@ export default function Events() {
         placeholder="Search by title, club or location"
       ></AppTextInput>
       <FilterTabs options={options} selected={filter} onSelect={setFilter} />
+      {user.role === "officer" && (
+        <AppButton
+          onPress={() => {
+            openEventForm();
+          }}
+          text="Add Event"
+        />
+      )}
       {content}
     </AppScreen>
   );
