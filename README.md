@@ -97,4 +97,4 @@ Diagram: [diagram.png](./docs/screenshots/diagram.png)
 
 ## Final commit
 
-`[final commit hash]`
+`514a7ab`
