@@ -1,10 +1,13 @@
-import { Text } from "react-native";
 import AppScreen from "../../../components/AppScreen";
+import ClubCard from "../../../components/ClubCard";
+import { clubs } from "../../../data/mockData";
 
 export default function Clubs() {
   return (
     <AppScreen>
-      <Text>This is the Clubs Tab</Text>
+      {clubs.map((c) => {
+        return <ClubCard key={c.id} club={c} />;
+      })}
     </AppScreen>
   );
 }
