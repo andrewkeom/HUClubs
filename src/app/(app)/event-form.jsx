@@ -1,3 +1,4 @@
+import DateTimePicker from "@expo/ui/community/datetime-picker";
 import { router, Stack } from "expo-router";
 import { useState } from "react";
 import { Alert, StyleSheet, Text, ToastAndroid, View } from "react-native";
@@ -19,6 +20,9 @@ export default function EventForm() {
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const [date, setDate] = useState(tomorrow);
+
+  const [showDate, setShowDate] = useState(false);
+  const [showTime, setShowTime] = useState(false);
 
   const { addEvent } = useData();
   const { user } = useAuth();
@@ -86,6 +90,60 @@ export default function EventForm() {
         />
         <View>
           <Text>{formatEventDate(date.toISOString())}</Text>
+          <View>
+            <AppButton
+              onPress={() => {
+                setShowDate(true);
+              }}
+              text="Pick date"
+            />
+            <AppButton
+              onPress={() => {
+                setShowTime(true);
+              }}
+              text="Pick time"
+            />
+          </View>
+          {showDate === true && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              presentation="dialog"
+              minimumDate={new Date()}
+              onValueChange={(event, pickedDate) => {
+                setShowDate(false);
+                const newDate = new Date(date);
+                newDate.setFullYear(
+                  pickedDate.getFullYear(),
+                  pickedDate.getMonth(),
+                  pickedDate.getDate(),
+                );
+                setDate(newDate);
+              }}
+              onDismiss={() => {
+                setShowDate(false);
+              }}
+            ></DateTimePicker>
+          )}
+          {showTime === true && (
+            <DateTimePicker
+              value={date}
+              mode="time"
+              presentation="dialog"
+              onValueChange={(event, pickedTime) => {
+                setShowTime(false);
+                const newDate = new Date(date);
+                newDate.setHours(
+                  pickedTime.getHours(),
+                  pickedTime.getMinutes(),
+                );
+                setDate(newDate);
+              }}
+              onDismiss={() => {
+                setShowTime(false);
+              }}
+            ></DateTimePicker>
+          )}
         </View>
         {error.length > 0 && <Text style={styles.error}>{error}</Text>}
         <AppButton
