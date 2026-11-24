@@ -7,16 +7,14 @@ export default function AppScreen(props) {
     contentStyle.push(styles.centered);
   }
   return (
-    <>
-      <View style={styles.container}>
-        <ScrollView
-          contentContainerStyle={contentStyle}
-          keyboardShouldPersistTaps="handled"
-        >
-          {props.children}
-        </ScrollView>
-      </View>
-    </>
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={contentStyle}
+        keyboardShouldPersistTaps="handled"
+      >
+        {props.children}
+      </ScrollView>
+    </View>
   );
 }
 

@@ -3,11 +3,9 @@ import { Colors, Radius, Spacing, Typography } from "../constants/theme";
 
 export default function AppButton(props) {
   return (
-    <>
-      <Pressable onPress={props.onPress} style={[styles.button, props.style]}>
-        <Text style={styles.buttonText}>{props.text}</Text>
-      </Pressable>
-    </>
+    <Pressable onPress={props.onPress} style={[styles.button, props.style]}>
+      <Text style={styles.buttonText}>{props.text}</Text>
+    </Pressable>
   );
 }
 

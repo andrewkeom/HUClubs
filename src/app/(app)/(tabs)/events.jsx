@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import AppScreen from "../../../components/AppScreen";
 import AppTextInput from "../../../components/AppTextInput";
@@ -115,12 +116,17 @@ export default function Events() {
           event={event}
           clubName={findClubName(event.clubId)}
           onPress={() => {
-            console.log(event.title);
+            openEvent(event.id);
           }}
         ></EventCard>
       );
     });
   }
+
+  function openEvent(id) {
+    router.push({ pathname: "/event/[id]", params: { id } });
+  }
+
   return (
     <AppScreen>
       <AppTextInput
